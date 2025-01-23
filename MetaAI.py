@@ -66,21 +66,16 @@ class MetaAIModule(loader.Module):
         """
         Convert Markdown to HTML manually.
         """
-        # Замена **жирного текста**
         text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
-        # Замена _курсива_
         text = re.sub(r"_(.+?)_", r"<i>\1</i>", text)
-        # Замена заголовков (# Header)
         text = re.sub(r"^# (.+)", r"<h1>\1</h1>", text, flags=re.MULTILINE)
         text = re.sub(r"^## (.+)", r"<h2>\1</h2>", text, flags=re.MULTILINE)
         text = re.sub(r"^### (.+)", r"<h3>\1</h3>", text, flags=re.MULTILINE)
-        # Замена кодовых блоков ```language\ncode```
         text = re.sub(
             r"```(\w+)?\n([\s\S]*?)```",
             lambda m: f"<pre><code class='{m.group(1) or 'plaintext'}'>{utils.escape_html(m.group(2))}</code></pre>",
             text,
         )
-        # Замена инлайнового кода `code`
         text = re.sub(r"`(.+?)`", r"<code>\1</code>", text)
         return text
 
